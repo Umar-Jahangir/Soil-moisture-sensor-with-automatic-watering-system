@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automatic Plant Watering System</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --secondary: #388E3C;
+            --light: #C8E6C9;
+            --dark: #1B5E20;
+            --accent: #8BC34A;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            background-color: #f8f9fa;
+        }
+        
+
+        .iconColor i {
+            color: black;
+        }
+
+        .navbar {
+            background-color: var(--primary);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            color: white;
+        }
+
+        .nav-link {
+            color: white !important;
+            font-weight: 500;
+            transition: all 0.3s;
+            margin: 0 10px;
+        }
+
+        .nav-link:hover {
+            transform: translateY(-2px);
+            color: var(--light) !important;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('/api/placeholder/1200/800') center/cover no-repeat;
+            opacity: 0.15;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-title {
+            position: relative;
+            margin-bottom: 40px;
+            color: var(--dark);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 50px;
+            height: 3px;
+            background-color: var(--primary);
+        }
+
+        .content-section {
+            padding: 80px 0;
+        }
+
+        .lead {
+    font-size: 1.25rem;
+    font-weight: 300;
+    margin-bottom: 20px;
+    color: var(--dark);
+}
+
+/* Image Gallery Styles */
+.image-gallery {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.gallery-container {
+    width: 100%;
+    overflow: hidden;
+}
+
+.gallery-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.gallery-image {
+    min-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.gallery-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    color: var(--primary);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.gallery-arrow:hover {
+    background-color: rgba(255, 255, 255, 1);
+}
+
+.left-arrow {
+    left: 10px;
+}
+
+.right-arrow {
+    right: 10px;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    padding: 10px 25px;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary);
+    border-color: var(--secondary);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+        .problem-card {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            height: 100%;
+            border: none;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .problem-card .card-header {
+            background-color: var(--primary);
+            color: white;
+            font-weight: bold;
+            padding: 15px;
+        }
+
+        .problem-icon {
+            font-size: 50px;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .feature-box {
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            background-color: white;
+            height: 100%;
+        }
+
+        .feature-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            background-color: var(--light);
+        }
+
+        .feature-icon {
+            font-size: 40px;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('/api/placeholder/800/450') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .play-button {
+            width: 80px;
+            height: 80px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .play-button:hover {
+            transform: scale(1.1);
+            background-color: white;
+        }
+
+        .play-icon {
+            font-size: 30px;
+            color: var(--primary);
+        }
+
+        .list-group-item {
+            border-left: 3px solid var(--primary);
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+
+        .list-group-item:hover {
+            transform: translateX(5px);
+            background-color: var(--light);
+        }
+
+        .footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-title {
+            font-weight: bold;
+            margin-bottom: 25px;
+            font-size: 22px;
+        }
+
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            margin-bottom: 10px;
+            display: block;
+            transition: all 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .social-icons a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            margin-right: 10px;
+            text-align: center;
+            line-height: 40px;
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .social-icons a:hover {
+            background-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            margin-top: 40px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            padding: 10px 25px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .home-image {
+            border-radius: 10px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            transition: all 0.5s;
+            overflow: hidden;
+        }
+
+        .home-image:hover {
+            transform: scale(1.03);
+        }
+
+        .water-drop {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-color: #4fa8ff;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            animation: drop 2s infinite;
+            opacity: 0;
+        }
+
+        @keyframes drop {
+            0% {
+                transform: translateY(-50px) rotate(-45deg);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100px) rotate(-45deg);
+                opacity: 0;
+            }
+        }
+
+        .plant-container {
+            position: relative;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .plant {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin-top: 100px;
+        }
+
+        .pot {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 70px;
+            background-color: #CD853F;
+            border-radius: 0 0 40% 40%;
+            z-index: 1;
+        }
+
+        .pot-top {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 15px;
+            background-color: #8B4513;
+            border-radius: 10px;
+            z-index: 2;
+        }
+
+        .soil {
+            position: absolute;
+            bottom: 65px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 10px;
+            background-color: #3A1F04;
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        .stem {
+            position: absolute;
+            bottom: 75px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 5px;
+            height: 100px;
+            background-color: #228B22;
+            z-index: 1;
+        }
+
+        .leaf {
+            position: absolute;
+            width: 30px;
+            height: 15px;
+            background-color: #32CD32;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .leaf1 {
+            bottom: 120px;
+            left: 35px;
+            transform: rotate(-30deg);
+        }
+
+        .leaf2 {
+            bottom: 140px;
+            right: 35px;
+            transform: rotate(30deg);
+        }
+
+        .leaf3 {
+            bottom: 160px;
+            left: 30px;
+            transform: rotate(-45deg);
+        }
+
+        .watering-can {
+            position: absolute;
+            top: 20px;
+            right: 90px;
+            width: 120px;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            z-index: 2;
+        }
+
+        .can-body {
+            width: 90px;
+            height: 50px;
+            background-color: #4682B4;
+            border-radius: 5px 20px 20px 5px;
+            position: relative;
+        }
+
+        .can-spout {
+            position: absolute;
+            top: 10px;
+            left: -30px;
+            width: 40px;
+            height: 10px;
+            background-color: #4682B4;
+            border-radius: 5px 0 0 5px;
+            transform: rotate(30deg);
+        }
+
+        .can-handle {
+            position: absolute;
+            top: -15px;
+            right: 10px;
+            width: 8px;
+            height: 25px;
+            background-color: #4682B4;
+            border-radius: 5px;
+        }
+
+        #watering-animation {
+            position: relative;
+            height: 300px;
+            margin: 40px 0;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 60px 0;
+            }
+            
+            .content-section {
+                padding: 50px 0;
+            }
+            
+            .problem-card, .feature-box {
+                margin-bottom: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fas fa-seedling me-2"></i>PlantSmart Irrigation</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#problems">Watering Issues</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#solutions">Solutions</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section" id="home">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 hero-content" data-aos="fade-right">
+                    <h1 class="display-4 fw-bold mb-4">Smart Watering for Healthy Plants</h1>
+                    <p class="lead mb-4">Discover the perfect automatic drip irrigation system for your garden. Never over or under water your plants again with our smart solution.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#problems" class="btn btn-light btn-lg">Learn More</a>
+                        <a href="#contact" class="btn btn-outline-light btn-lg">Contact Us</a>
+                    </div>
+                </div>
+                <div class="col-lg-6" data-aos="fade-left">
+                    <div class="plant-container">
+                        <div class="watering-can">
+                            <div class="can-body">
+                                <div class="can-spout"></div>
+                                <div class="can-handle"></div>
+                            </div>
+                        </div>
+                        <div class="plant">
+                            <div class="stem"></div>
+                            <div class="leaf leaf1"></div>
+                            <div class="leaf leaf2"></div>
+                            <div class="leaf leaf3"></div>
+                            <div class="pot-top"></div>
+                            <div class="soil"></div>
+                            <div class="pot"></div>
+                        </div>
+                        <div id="drops-container"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   <!-- About Section -->
+<section class="content-section bg-light" id="about">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0" data-aos="fade-right">
+                <!-- Image Gallery with Controls -->
+                <div class="image-gallery">
+                    <div class="gallery-container">
+                        <div class="gallery-track">
+                            <img src="Assets/img1.jpg" alt="Automatic Drip Irrigation System" class="gallery-image">
+                            <img src="Assets/img2.jpg" alt="Automatic Drip Irrigation System" class="gallery-image">
+                            <img src="Assets/img3.jpg" alt="Automatic Drip Irrigation System" class="gallery-image">
+                        </div>
+                    </div>
+                    <!-- Navigation Arrows -->
+                    <button class="gallery-arrow left-arrow" onclick="scrollGallery(-1)">&#10094;</button>
+                    <button class="gallery-arrow right-arrow" onclick="scrollGallery(1)">&#10095;</button>
+                </div>
+            </div>
+            <div class="col-lg-6" data-aos="fade-left">
+                <h2 class="section-title">About Plant Watering</h2>
+                <p class="lead">Finding the perfect balance for watering your plants can be challenging.</p>
+                <p>Under watering is a common gardening issue that can lead to plant stress, poor growth, and even death. Many gardeners struggle to find the right balance, and our mission is to provide the knowledge needed to keep your plants hydrated and flourishing.</p>
+                <p>Our automatic drip irrigation system provides the perfect solution, delivering just the right amount of water directly to your plants' roots when they need it most.</p>
+                <a href="#problems" class="btn btn-primary mt-3">Learn About Watering Issues</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- Video Section -->
+    <section class="content-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center mb-5" data-aos="fade-up">
+                    <h2 class="section-title mx-auto">See Our System in Action</h2>
+                    <p class="lead">Watch how our automatic drip irrigation system works to provide optimal water levels for your plants.</p>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-10" data-aos="zoom-in">
+                    <div class="video-container">
+                        <div class="video-placeholder">
+                            <div class="play-button">
+                                <i class="fas fa-play play-icon"></i>
+                            </div>
+                        </div>
+                        <video width="1422" height="800" controls>
+                            <source src="Assets/VID.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problems Section -->
+    <section class="content-section bg-light" id="problems">
+        <div class="container">
+            <div class="row text-center mb-5">
+                <div class="col-lg-8 mx-auto" data-aos="fade-up">
+                    <h2 class="section-title mx-auto">Common Watering Challenges</h2>
+                    <p class="lead">Understanding the problems in plant watering is the first step toward healthier plants.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="problem-card">
+                        <div class="card-header">
+                            <h4 class="mb-0">Overwatering Issues</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center">
+                                <i class="fas fa-tint-slash problem-icon"></i>
+                            </div>
+                            <p><strong>Too much watering of potted plants can be deadly.</strong> When excess water fills the soil gaps, it replaces air, preventing outside oxygen from entering. This results in:</p>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Hypoxic soil conditions that hinder root respiration and reduce physiological function</li>
+                                <li class="list-group-item">Blocked ability to absorb water and nutrients</li>
+                                <li class="list-group-item">Increased soil acidity due to aerobic bacteria activity</li>
+                                <li class="list-group-item">Production of toxic substances like hydrogen sulfide and ammonia</li>
+                                <li class="list-group-item">Reduced photosynthesis and excessive accumulation of alcohol</li>
+                            </ul>
+                            <p class="mt-3">Eventually, these conditions can lead to plant starvation and death.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="problem-card">
+                        <div class="card-header">
+                            <h4 class="mb-0">Underwatering Problems</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center">
+                                <i class="fas fa-tint problem-icon"></i>
+                            </div>
+                            <p><strong>Insufficient watering can be just as harmful to your plants.</strong> When plants don't receive enough water, they experience various stress symptoms:</p>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Wilting or drooping leaves as plants lose turgor pressure</li>
+                                <li class="list-group-item">Dry and brittle soil that pulls away from the pot edges</li>
+                                <li class="list-group-item">Brown and crispy leaf edges (leaf scorch)</li>
+                                <li class="list-group-item">Slow or stunted growth as plants conserve energy</li>
+                                <li class="list-group-item">Increased susceptibility to pests and diseases</li>
+                            </ul>
+                            <p class="mt-3">Long-term underwatering can lead to permanent damage and plant death.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="problem-card">
+                        <div class="card-header">
+                            <h4 class="mb-0">Seasonal Challenges</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center">
+                                <i class="fas fa-calendar-alt problem-icon"></i>
+                            </div>
+                            <p><strong>Seasonal changes require adjustments to watering routines.</strong></p>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><strong>Summer Challenges:</strong> Heat causes rapid water evaporation, requiring more frequent watering and use of mulch to reduce moisture loss.</li>
+                                <li class="list-group-item"><strong>Winter Issues:</strong> Cold weather slows plant water uptake. Avoid overwatering by checking soil moisture before watering and reducing frequency.</li>
+                                <li class="list-group-item"><strong>Spring Growth:</strong> As plants enter active growth phases, water needs increase but can vary by species.</li>
+                                <li class="list-group-item"><strong>Fall Transition:</strong> Preparing plants for dormancy requires gradual reduction in watering frequency.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="400">
+                    <div class="problem-card">
+                        <div class="card-header">
+                            <h4 class="mb-0">Practical Dilemmas</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center">
+                                <i class="fas fa-exclamation-triangle problem-icon"></i>
+                            </div>
+                            <p><strong>Even dedicated gardeners face these common challenges:</strong></p>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><strong>Forgetting to Water:</strong> Busy schedules can lead to inconsistent watering. Set reminders or use automatic systems.</li>
+                                <li class="list-group-item"><strong>Vacations and Travel:</strong> Going on holidays requires planning ahead for plant care. Consider drip irrigation systems or asking a neighbor for help.</li>
+                                <li class="list-group-item"><strong>Inconsistent Watering:</strong> Irregular schedules can stress plants. Plants prefer consistent care routines.</li>
+                                <li class="list-group-item"><strong>Multiple Plant Types:</strong> Different plants have varied water needs, making manual watering complex.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solutions Section -->
+    <section class="content-section" id="solutions">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
+                    <h2 class="section-title mx-auto">Our Smart Watering Solutions</h2>
+                    <p class="lead">Discover how our automatic drip irrigation system solves these common watering problems.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-box">
+                        <div class="text-center">
+                            <i class="fas fa-tint feature-icon"></i>
+                            <h4>Precision Watering</h4>
+                        </div>
+                        <p>Our system delivers water directly to the plant's root zone, minimizing waste and ensuring optimal moisture levels for each plant's specific needs.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-box">
+                        <div class="text-center">
+                            <i class="fas fa-clock feature-icon"></i>
+                            <h4>Automated Scheduling</h4>
+                        </div>
+                        <p>Set it and forget it! Program watering schedules based on each plant's needs, seasonal changes, and local weather conditions.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-box">
+                        <div class="text-center">
+                            <i class="fas fa-leaf feature-icon"></i>
+                            <h4>Plant Health Monitoring</h4>
+                        </div>
+                        <p>Optional soil moisture sensors can detect when plants actually need water, preventing both over and under watering issues.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-box">
+                        <div class="text-center">
+                            <i class="fas fa-water feature-icon"></i>
+                            <h4>Water Conservation</h4>
+                        </div>
+                        <p>Save up to 70% of water compared to traditional watering methods by delivering moisture directly where it's needed.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="500">
+                    <div class="feature-box">
+                        <div class="text-center">
+                            <i class="fas fa-mobile-alt feature-icon"></i>
+                            <h4>Smart Control</h4>
+                        </div>
+                        <p>Control your irrigation system from anywhere using our mobile app, making adjustments even when you're away from home.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="600">
+                    <div class="feature-box">
+                        <div class="text-center">
+                            <i class="fas fa-tools feature-icon"></i>
+                            <h4>Easy Installation</h4>
+                        </div>
+                        <p>Simple DIY setup with modular components that adapt to any garden size, from small apartment balconies to large landscapes.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-5 align-items-center">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <h3>Prevention Tips</h3>
+                    <p>Even with an automatic system, these best practices will help maintain plant health:</p>
+                    <ul class="list-group">
+                        <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i>Establish a regular watering routine based on plant type and season</li>
+                        <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i>Use mulch to retain soil moisture and reduce evaporation</li>
+                        <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i>Choose water-retentive soil mixes appropriate for your plants</li>
+                        <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i>Monitor plants for early signs of watering stress</li>
+                        <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i>Group plants with similar water requirements together</li>
+                    </ul>
+                </div>
+                <div class="col-lg-6 mt-4 mt-lg-0" data-aos="fade-left">
+                    <div id="watering-animation">
+                        <!-- Animation will be inserted here by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="content-section bg-primary text-white">
+        <div class="container text-center" data-aos="zoom-in">
+            <h2 class="mb-4">Ready to transform your plant care routine?</h2>
+            <p class="lead mb-5">Our automatic drip irrigation system will save you time, conserve water, and help your plants thrive.</p>
+            <a href="#contact" class="btn btn-light btn-lg">Contact Us Today</a>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+<section class="content-section" id="contact">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
+                <h2 class="section-title mx-auto">Contact Us</h2>
+                <p class="lead">Have questions? We're here to help you find the perfect watering solution for your plants.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 mb-4 mb-lg-0" data-aos="fade-right">
+                <form id="contactForm">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Your Name</label>
+                        <input type="text" class="form-control" id="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Your Message</label>
+                        <textarea class="form-control" id="message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
+            </div>
+            <div class="col-lg-6" data-aos="fade-left">
+                <div class="bg-light p-4 rounded">
+                    <h4 class="mb-4">Contact Information</h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <i class="fas fa-phone me-2 text-primary"></i>
+                            <strong>Phone:</strong> +91 93566 16091
+                        </li>
+                        <li class="mb-3">
+                            <i class="fas fa-envelope me-2 text-primary"></i>
+                            <strong>Email:</strong> umarjahangir39@gmail.com
+                        </li>
+                        <li class="mb-3">
+                            <i class="fas fa-map-marker-alt me-2 text-primary"></i>
+                            <strong>Address:</strong> 123 Green Valley, Plant City, India
+                        </li>
+                    </ul>
+                    <div class="mt-4">
+                        <h5>Follow Us</h5>
+                        <div class="social-icons">
+                            <a href="#" class="me-2 iconColor"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="me-2 iconColor"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="me-2 iconColor"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="me-2 iconColor"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 mb-4 mb-lg-0">
+                <h4 class="footer-title">PlantSmart Irrigation</h4>
+                <p>Your trusted partner in smart plant care solutions. We provide innovative automatic drip irrigation systems to keep your plants healthy and thriving.</p>
+            </div>
+            <div class="col-lg-4 mb-4 mb-lg-0">
+                <h4 class="footer-title">Quick Links</h4>
+                <div class="footer-links">
+                    <a href="#home">Home</a>
+                    <a href="#about">About</a>
+                    <a href="#problems">Watering Issues</a>
+                    <a href="#solutions">Solutions</a>
+                    <a href="#contact">Contact</a>
+                    <a href="User_feedback.html">Feedback</a>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <h4 class="footer-title">Newsletter</h4>
+                <p>Subscribe to our newsletter for the latest updates and gardening tips.</p>
+                <form class="d-flex">
+                    <input type="email" class="form-control me-2" placeholder="Enter your email">
+                    <button type="submit" class="btn btn-primary">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-12 text-center">
+                <p class="copyright">&copy; 2023 PlantSmart Irrigation. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="Scrollingimages.js"></script>
+<script>
+    // Initialize AOS (Animate On Scroll)
+    AOS.init({
+        duration: 1000,
+        once: true
+    });
+
+    // Water Drop Animation
+    function createWaterDrop() {
+        const drop = document.createElement('div');
+        drop.className = 'water-drop';
+        drop.style.left = `${Math.random() * 100}%`;
+        drop.style.animationDuration = `${Math.random() * 2 + 1}s`;
+        document.getElementById('drops-container').appendChild(drop);
+        setTimeout(() => drop.remove(), 3000);
+    }
+
+    setInterval(createWaterDrop, 500);
+
+    // Video Play Button
+    document.querySelector('.play-button').addEventListener('click', function () {
+        const videoPlaceholder = document.querySelector('.video-placeholder');
+        videoPlaceholder.innerHTML = `
+            <iframe width="100%" height="100%" src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+            title="YouTube video player" frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen></iframe>
+        `;
+    });
+
+    // Handle Contact Form Submission
+    document.getElementById('contactForm').addEventListener('submit', function (e) {
+        e.preventDefault(); // Prevent form from submitting the traditional way
+
+        // Get form data
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const message = document.getElementById('message').value;
+
+        // Create a new message object
+        const newMessage = {
+            name: name,
+            email: email,
+            message: message,
+            status: 'new', // Default status is 'new'
+            date: new Date().toLocaleString() // Add timestamp
+        };
+
+        // Retrieve existing messages from localStorage
+        let messages = JSON.parse(localStorage.getItem('contactMessages')) || [];
+
+        // Add the new message to the array
+        messages.push(newMessage);
+
+        // Save the updated messages array back to localStorage
+        localStorage.setItem('contactMessages', JSON.stringify(messages));
+
+        // Clear the form
+        document.getElementById('contactForm').reset();
+
+        // Notify the user
+        alert('Thank you for your message! We will get back to you soon.');
+    });
+</script>
+</body>
+</html>
