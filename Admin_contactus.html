@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Contact Messages</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        /* Navbar */
+        nav {
+            background-color: #333;
+            padding: 10px 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin-right: 20px;
+        }
+
+        nav ul li:last-child {
+            margin-right: 0;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        nav ul li a:hover {
+            background-color: #555;
+            color: #ffcc00;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .message-list {
+            margin-top: 2rem;
+        }
+
+        .message-item {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+        }
+
+        .message-meta {
+            color: #666;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-new {
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .status-read {
+            color: #28a745;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-right: 0.5rem;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .btn-red {
+            background-color: #dc3545;
+        }
+
+        .btn-red:hover {
+            background-color: #c82333;
+        }
+
+        .btn-blue {
+            background-color: #007bff;
+        }
+
+        .btn-blue:hover {
+            background-color: #0069d9;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        #adminPanel {
+            display: none;
+        }
+
+        .filter-controls {
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .filter-controls select {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-right: 1rem;
+        }
+
+        .message-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 0.5rem;
+        }
+
+        .message-actions button {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li>
+                <a href="Admin_feedback.html">Feedback</a>
+            </li>
+            <li>
+                <a href="Admin_contactus.html">Contact us</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Login Form -->
+    <div id="loginForm" class="login-container">
+        <h2>Contact us Administrator Login</h2>
+        <div>
+            <input type="password" id="adminPassword" placeholder="Enter admin password">
+            <button onclick="adminLogin()">Login</button>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="adminPanel" class="container">
+        <div class="header">
+            <h2>Contact Messages Management</h2>
+            <div>
+                <button onclick="downloadAllMessages()">Download All Messages</button>
+                <button onclick="adminLogout()" class="btn-red">Logout</button>
+            </div>
+        </div>
+
+        <div class="filter-controls">
+            <select id="statusFilter" onchange="filterMessages()">
+                <option value="all">All Messages</option>
+                <option value="new">New Messages</option>
+                <option value="read">Read Messages</option>
+            </select>
+            <button onclick="markAllAsRead()" class="btn-blue">Mark All as Read</button>
+        </div>
+
+        <div id="messageList" class="message-list">
+            <!-- Contact messages will appear here -->
+        </div>
+    </div>
+
+    <script>
+        const ADMIN_PASSWORD = 'admin123'; // Admin password for login
+        
+        // Check if messages exist in localStorage, if not initialize empty array
+        if (!localStorage.getItem('contactMessages')) {
+            localStorage.setItem('contactMessages', JSON.stringify([]));
+        }
+
+        function adminLogin() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === ADMIN_PASSWORD) {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                loadMessages();
+            } else {
+                alert('Invalid administrator password!');
+            }
+            document.getElementById('adminPassword').value = '';
+        }
+
+        function adminLogout() {
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('adminPanel').style.display = 'none';
+        }
+
+        function loadMessages() {
+            const statusFilter = document.getElementById('statusFilter').value;
+            const messageList = document.getElementById('messageList');
+            let allMessages = JSON.parse(localStorage.getItem('contactMessages') || '[]');
+            
+            // Apply filter if needed
+            if (statusFilter !== 'all') {
+                allMessages = allMessages.filter(msg => msg.status === statusFilter);
+            }
+            
+            if (allMessages.length === 0) {
+                messageList.innerHTML = '<p>No contact messages found.</p>';
+                return;
+            }
+
+            messageList.innerHTML = allMessages.map((message, index) => `
+                <div class="message-item" data-id="${index}">
+                    <div class="message-meta">
+                        <strong>Message #${index + 1}</strong> | 
+                        Received: ${message.date} | 
+                        Status: <span class="status-${message.status}">${message.status === 'new' ? 'New' : 'Read'}</span>
+                    </div>
+                    <div><strong>Name:</strong> ${message.name}</div>
+                    <div><strong>Email:</strong> ${message.email}</div>
+                    <div><strong>Message:</strong> ${message.message}</div>
+                    <div class="message-actions">
+                        <button onclick="toggleMessageStatus(${index})" class="btn-blue">
+                            ${message.status === 'new' ? 'Mark as Read' : 'Mark as New'}
+                        </button>
+                        <button onclick="deleteMessage(${index})" class="btn-red">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleMessageStatus(messageIndex) {
+            const allMessages = JSON.parse(localStorage.getItem('contactMessages') || '[]');
+            if (messageIndex >= 0 && messageIndex < allMessages.length) {
+                // Toggle status between 'new' and 'read'
+                allMessages[messageIndex].status = 
+                    allMessages[messageIndex].status === 'new' ? 'read' : 'new';
+                
+                localStorage.setItem('contactMessages', JSON.stringify(allMessages));
+                loadMessages(); // Refresh the list
+            }
+        }
+
+        function deleteMessage(messageIndex) {
+            if (confirm('Are you sure you want to delete this message?')) {
+                const allMessages = JSON.parse(localStorage.getItem('contactMessages') || '[]');
+                if (messageIndex >= 0 && messageIndex < allMessages.length) {
+                    allMessages.splice(messageIndex, 1);
+                    localStorage.setItem('contactMessages', JSON.stringify(allMessages));
+                    loadMessages(); // Refresh the list
+                }
+            }
+        }
+
+        function markAllAsRead() {
+            const allMessages = JSON.parse(localStorage.getItem('contactMessages') || '[]');
+            allMessages.forEach(message => {
+                message.status = 'read';
+            });
+            localStorage.setItem('contactMessages', JSON.stringify(allMessages));
+            loadMessages(); // Refresh the list
+        }
+
+        function filterMessages() {
+            loadMessages(); // This will apply the current filter
+        }
+
+        function downloadAllMessages() {
+            const allMessages = JSON.parse(localStorage.getItem('contactMessages') || '[]');
+            
+            if (allMessages.length === 0) {
+                alert('No contact messages found!');
+                return;
+            }
+
+            let messagesText = 'All Contact Messages\n=====================\n\n';
+            allMessages.forEach((message, index) => {
+                messagesText += `Message #${index + 1}\n`;
+                messagesText += `Name: ${message.name}\n`;
+                messagesText += `Email: ${message.email}\n`;
+                messagesText += `Message: ${message.message}\n`;
+                messagesText += `Status: ${message.status}\n`;
+                messagesText += `Date: ${message.date}\n`;
+                messagesText += '----------------------\n\n';
+            });
+
+            const blob = new Blob([messagesText], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'all_contact_messages.txt';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
